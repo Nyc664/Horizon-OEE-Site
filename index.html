@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horizon OEE — Site PTH/WAVE</title>
+
+  <style>
+    :root {
+      --bg: #06101d;
+      --panel: #0d1b2c;
+      --panel2: #11243a;
+      --row: #111d2d;
+      --row2: #0b1422;
+      --line: rgba(95, 160, 220, .22);
+      --line-strong: rgba(32, 223, 255, .45);
+      --cyan: #20dfff;
+      --cyan2: #12b8ff;
+      --green: #4df08d;
+      --yellow: #ffd84d;
+      --purple: #9a6dff;
+      --red: #ff5f71;
+      --text: #edf7ff;
+      --muted: #9eafc2;
+      --input: #07111f;
+      --shadow: 0 18px 55px rgba(0, 0, 0, .38);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% -10%, rgba(32, 223, 255, .16), transparent 30%),
+        radial-gradient(circle at 95% 0%, rgba(154, 109, 255, .10), transparent 28%),
+        linear-gradient(145deg, #030912, var(--bg) 58%, #030912);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(32, 223, 255, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(32, 223, 255, .025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      user-select: none;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(1540px, 100%);
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      gap: 14px;
+      min-height: calc(100vh - 20px);
+    }
+
+    .main-panel,
+    .side-panel {
+      border: 1px solid var(--line);
+      background: rgba(7, 16, 29, .88);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .main-panel {
+      border-radius: 10px;
+    }
+
+    .side-panel {
+      border-radius: 10px;
+      position: sticky;
+      top: 10px;
+      max-height: calc(100vh - 20px);
+      overflow-y: auto;
+    }
+
+    .topbar {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(18, 34, 53, .96), rgba(9, 19, 33, .96));
+    }
+
+    .brand {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hamb {
+      width: 30px;
+      height: 24px;
+      display: grid;
+      gap: 5px;
+      flex: 0 0 auto;
+    }
+
+    .hamb span {
+      height: 3px;
+      border-radius: 999px;
+      background: #d8e9f7;
+      opacity: .9;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      color: var(--cyan);
+      font-size: 34px;
+      font-weight: 900;
+      transform: skewX(-9deg);
+      text-shadow: 0 0 18px rgba(32, 223, 255, .35);
+    }
+
+    .title h1 {
+      margin: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: clamp(23px, 3vw, 34px);
+      line-height: 1;
+      letter-spacing: -.8px;
+    }
+
+    .title h1 span {
+      color: var(--cyan);
+      font-size: clamp(18px, 2vw, 23px);
+    }
+
+    .title p {
+      margin: 4px 0 0;
+      color: var(--text);
+      font-size: 16px;
+      opacity: .96;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex: 0 0 auto;
+    }
+
+    .bell {
+      position: relative;
+      font-size: 23px;
+      opacity: .88;
+    }
+
+    .bell em {
+      position: absolute;
+      right: -10px;
+      top: -10px;
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--cyan);
+      color: #02101b;
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .btn-new {
+      min-height: 48px;
+      border: 0;
+      border-radius: 10px;
+      padding: 0 20px;
+      color: #02101b;
+      background: linear-gradient(135deg, var(--cyan2), var(--cyan));
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(32, 223, 255, .18);
+    }
+
+    .btn-new span {
+      font-size: 26px;
+      vertical-align: -3px;
+      margin-right: 8px;
+      font-weight: 400;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      padding: 22px 18px;
+    }
+
+    .kpi {
+      min-height: 104px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(22, 42, 65, .88), rgba(12, 25, 41, .95));
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .kpi-icon {
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 30px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.05);
+    }
+
+    .kpi:nth-child(1) .kpi-icon { color: var(--cyan); background: rgba(32,223,255,.12); }
+    .kpi:nth-child(2) .kpi-icon { color: var(--yellow); background: rgba(255,216,77,.10); }
+    .kpi:nth-child(3) .kpi-icon { color: var(--green); background: rgba(77,240,141,.11); }
+    .kpi:nth-child(4) .kpi-icon { color: var(--purple); background: rgba(154,109,255,.13); }
+
+    .kpi span {
+      display: block;
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .kpi strong {
+      display: block;
+      color: var(--cyan);
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .kpi:nth-child(2) strong { color: var(--yellow); }
+    .kpi:nth-child(3) strong { color: var(--green); }
+    .kpi:nth-child(4) strong { color: var(--purple); }
+
+    .kpi small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .table-card {
+      margin: 0 18px 22px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(16, 31, 49, .92), rgba(8, 17, 30, .97));
+      overflow: hidden;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      padding: 12px 10px 0;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1050px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      height: 48px;
+      color: var(--cyan);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      font-weight: 900;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(32, 223, 255, .28);
+      text-align: left;
+      padding: 0 14px;
+    }
+
+    td {
+      min-height: 54px;
+      padding: 13px 14px;
+      color: #dfeaf6;
+      border-bottom: 1px solid rgba(255,255,255,.055);
+      vertical-align: middle;
+    }
+
+    tbody tr.data-row {
+      background: linear-gradient(90deg, rgba(17, 29, 45, .98), rgba(13, 22, 36, .98));
+      cursor: pointer;
+      transition: .12s ease;
+    }
+
+    tbody tr.data-row:nth-child(even) {
+      background: linear-gradient(90deg, rgba(12, 21, 34, .98), rgba(9, 17, 29, .98));
+    }
+
+    tbody tr.data-row:hover {
+      background: rgba(18, 44, 68, .96);
+    }
+
+    .open-row {
+      outline: 1px solid rgba(32, 223, 255, .55);
+      outline-offset: -1px;
+      box-shadow: inset 4px 0 0 var(--cyan);
+    }
+
+    .selected-row {
+      outline: 1px solid rgba(255, 216, 77, .45);
+      outline-offset: -1px;
+    }
+
+    .empty-row td {
+      padding: 42px 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 17px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .empty-row strong {
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      min-height: 28px;
+      padding: 6px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status.open {
+      color: #9af5ff;
+      background: rgba(32, 223, 255, .13);
+      border: 1px solid rgba(32, 223, 255, .22);
+    }
+
+    .status.done {
+      color: #9bffc4;
+      background: rgba(77, 240, 141, .13);
+      border: 1px solid rgba(77, 240, 141, .18);
+    }
+
+    .cyan-text {
+      color: var(--cyan);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .hint-row td {
+      padding: 0;
+    }
+
+    .hint-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--cyan);
+      border-bottom: 1px solid rgba(32, 223, 255, .35);
+      color: var(--cyan);
+      background: rgba(32, 223, 255, .06);
+      font-weight: 700;
+    }
+
+    .btn-end-small {
+      min-height: 38px;
+      padding: 0 16px;
+      border-radius: 8px;
+      border: 1px solid var(--cyan);
+      background: rgba(32, 223, 255, .08);
+      color: var(--cyan);
+      cursor: pointer;
+      font-weight: 900;
+      white-space: nowrap;
+      box-shadow: inset 0 0 0 1px rgba(32, 223, 255, .06);
+    }
+
+    .btn-end-small:hover {
+      background: rgba(32, 223, 255, .15);
+    }
+
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 22px 18px;
+      color: #c7d4e2;
+      flex-wrap: wrap;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pagination.hidden,
+    .per-page.hidden {
+      display: none;
+    }
+
+    .page-btn {
+      width: 38px;
+      height: 34px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.035);
+      color: #d8e6f3;
+      cursor: pointer;
+    }
+
+    .page-btn.active {
+      background: linear-gradient(135deg, var(--cyan2), var(--cyan));
+      color: #04111d;
+      font-weight: 900;
+      box-shadow: 0 0 16px rgba(32,223,255,.35);
+    }
+
+    .per-page {
+      height: 36px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,.13);
+      padding: 0 12px;
+      color: #d8e6f3;
+      background: rgba(255,255,255,.035);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .side-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 26px 20px 16px;
+    }
+
+    .side-head h2 {
+      margin: 0;
+      color: var(--cyan);
+      font-size: 22px;
+      letter-spacing: -.2px;
+    }
+
+    .close-btn {
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.72);
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .form {
+      padding: 0 20px 24px;
+    }
+
+    .field {
+      margin: 17px 0 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e7f1fb;
+      font-size: 15px;
+    }
+
+    .input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 8px;
+      background: rgba(8, 17, 31, .75);
+      color: var(--text);
+      outline: none;
+      transition: .12s ease;
+      font-size: 16px;
+    }
+
+    .input,
+    select {
+      height: 40px;
+      padding: 0 12px;
+    }
+
+    .input[readonly] {
+      opacity: .86;
+      background: rgba(255,255,255,.08);
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+      padding: 12px;
+      line-height: 1.45;
+    }
+
+    .input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(32, 223, 255, .12);
+    }
+
+    option {
+      background: #0b1727;
+      color: var(--text);
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .status-line {
+      margin: 20px 0 20px;
+      color: var(--cyan);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .2px;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--cyan);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .check-row input {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      border-radius: 6px;
+      border: 2px solid var(--cyan);
+      background: transparent;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .check-row input:checked::after {
+      content: "✓";
+      color: var(--cyan);
+      font-weight: 900;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .big-btn {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+
+    .primary {
+      border: 0;
+      color: #02101b;
+      background: linear-gradient(135deg, var(--cyan2), var(--cyan));
+    }
+
+    .outline {
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      background: rgba(32, 223, 255, .03);
+    }
+
+    .danger-btn {
+      border: 1px solid rgba(255, 95, 113, .52);
+      color: #ffd8dd;
+      background: rgba(255, 95, 113, .08);
+    }
+
+    .danger-btn:hover {
+      background: rgba(255, 95, 113, .14);
+    }
+
+    .finish-box {
+      display: none;
+      margin: 4px 0 14px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(32, 223, 255, .28);
+      background: rgba(32, 223, 255, .055);
+    }
+
+    .finish-box.show {
+      display: block;
+    }
+
+    .finish-title {
+      color: var(--cyan);
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 6px;
+    }
+
+    .finish-desc {
+      color: #c9d7e6;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .finish-btn {
+      border: 1px solid var(--cyan);
+      color: #02101b;
+      background: linear-gradient(135deg, var(--cyan2), var(--cyan));
+      margin-bottom: 0;
+    }
+
+    .big-btn.hidden-action {
+      display: none;
+    }
+
+    .info {
+      color: #c9d7e6;
+      font-size: 13px;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .alert {
+      display: none;
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,95,113,.33);
+      background: rgba(255,95,113,.10);
+      color: #ffd8dd;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .char-count {
+      margin-top: 7px;
+      color: var(--muted);
+      text-align: right;
+      font-size: 13px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: rgba(0, 5, 12, .72);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(620px, 100%);
+      border: 1px solid rgba(32, 223, 255, .28);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #11243a, #081527);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .modal-card h2 {
+      margin: 0 0 8px;
+      color: var(--cyan);
+      font-size: 25px;
+    }
+
+    .modal-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 18px 0 20px;
+    }
+
+    .modal-item {
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      background: rgba(255,255,255,.04);
+      padding: 12px;
+    }
+
+    .modal-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 5px;
+    }
+
+    .modal-item strong {
+      display: block;
+      overflow-wrap: anywhere;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 1180px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .kpis {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        height: auto;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        padding: 6px;
+      }
+
+      .kpis,
+      .two-cols,
+      .modal-grid,
+      .modal-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi {
+        grid-template-columns: 62px 1fr;
+      }
+
+      .table-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .btn-new {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <section class="shell">
+      <section class="main-panel">
+        <header class="topbar">
+          <div class="brand">
+            <div class="hamb" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="logo">A</div>
+            <div class="title">
+              <h1>HORIZON <span>OEE — PTH/WAVE</span></h1>
+              <p>Registros de Parada PTH/WAVE</p>
+            </div>
+          </div>
+
+          <div class="top-actions">
+            <div class="bell" title="Registros em abertura">⚑<em id="notCount">0</em></div>
+            <button type="button" class="btn-new" id="btnNovo"><span>+</span>Novo Registro</button>
+          </div>
+        </header>
+
+        <section class="kpis">
+          <article class="kpi">
+            <div class="kpi-icon">◷</div>
+            <div>
+              <span>Em Abertura</span>
+              <strong id="kpiAbertos">0</strong>
+              <small>registros</small>
+            </div>
+          </article>
+
+          <article class="kpi">
+            <div class="kpi-icon">⌁</div>
+            <div>
+              <span>Em Andamento</span>
+              <strong id="kpiAndamento">0</strong>
+              <small>registros</small>
+            </div>
+          </article>
+
+          <article class="kpi">
+            <div class="kpi-icon">✓</div>
+            <div>
+              <span>Concluídos Hoje</span>
+              <strong id="kpiConcluidos">0</strong>
+              <small>registros</small>
+            </div>
+          </article>
+
+          <article class="kpi">
+            <div class="kpi-icon">▰</div>
+            <div>
+              <span>Linha PTH/WAVE</span>
+              <strong>PTH/WAVE</strong>
+              <small>ativa</small>
+            </div>
+          </article>
+        </section>
+
+        <section class="table-card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>STATUS</th>
+                  <th>ORIGEM</th>
+                  <th>DATA ↓</th>
+                  <th>LINHA</th>
+                  <th>OP</th>
+                  <th>INÍCIO</th>
+                  <th>FIM</th>
+                  <th>TEMPO</th>
+                  <th>ACÚMULO</th>
+                  <th>MOTIVO</th>
+                  <th>OBS</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyRegistros"></tbody>
+            </table>
+          </div>
+
+          <footer class="table-footer">
+            <div id="tableInfo">Mostrando 0 registros</div>
+            <div class="pagination" id="paginationBox">
+              <button type="button" class="page-btn">|&lt;</button>
+              <button type="button" class="page-btn">&lt;</button>
+              <button type="button" class="page-btn active">1</button>
+              <button type="button" class="page-btn">2</button>
+              <button type="button" class="page-btn">3</button>
+              <button type="button" class="page-btn">&gt;</button>
+              <button type="button" class="page-btn">&gt;|</button>
+            </div>
+            <div class="per-page" id="perPageBox">20 / página⌄</div>
+          </footer>
+        </section>
+      </section>
+
+      <aside class="side-panel" id="sidePanel">
+        <div class="side-head">
+          <h2 id="formTitle">Novo Registro de Parada</h2>
+          <button type="button" class="close-btn" id="btnFechar" title="Limpar formulário">×</button>
+        </div>
+
+        <form class="form" id="formRegistro" autocomplete="off">
+          <div class="alert" id="alertBox"></div>
+
+          <div class="field">
+            <label for="data">Data (automático)</label>
+            <input class="input" type="text" id="data" readonly />
+          </div>
+
+          <div class="two-cols">
+            <div class="field">
+              <label for="inicio">Hora início (automática)</label>
+              <input class="input" type="text" id="inicio" readonly />
+            </div>
+
+            <div class="field">
+              <label for="fim">Hora fim (automática)</label>
+              <input class="input" type="text" id="fim" readonly value="—" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="linha">Linha</label>
+            <select id="linha">
+              <option value="PTH/Wave 1">PTH/Wave 1</option>
+              <option value="PTH/Wave 2">PTH/Wave 2</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="op">Nº OP</label>
+            <input class="input" type="text" id="op" inputmode="numeric" placeholder="Digite a OP, se houver" />
+          </div>
+
+          <div class="field">
+            <label for="motivo">Motivo da parada</label>
+            <select id="motivo">
+              <option value="">Selecione...</option>
+              <option value="Manutenção">Manutenção</option>
+              <option value="Parada por Processo">Parada por Processo</option>
+              <option value="Setup">Setup</option>
+              <option value="Falta de Material">Falta de Material</option>
+              <option value="Qualidade">Qualidade</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="obs">Observação</label>
+            <textarea id="obs" maxlength="250" placeholder="Descreva rapidamente o que ocorreu na linha PTH/Wave..."></textarea>
+            <div class="char-count"><span id="charCount">0</span> / 250</div>
+          </div>
+
+          <div class="status-line" id="statusForm">Status: NOVO REGISTRO</div>
+
+          <label class="check-row">
+            <input type="checkbox" id="suporte" />
+            Solicitar Atendimento Técnico Automático
+          </label>
+
+          <button type="submit" class="big-btn primary" id="btnSalvar">▶ Salvar / Iniciar Parada</button>
+
+          <div class="finish-box" id="finishBox">
+            <div class="finish-title">Finalização da parada</div>
+            <div class="finish-desc">Use esta ação somente quando a parada da linha já foi resolvida. A hora fim será registrada automaticamente.</div>
+            <button type="button" class="big-btn finish-btn" id="btnEncerrar">✓ Finalizar Parada</button>
+          </div>
+
+          <button type="button" class="big-btn danger-btn hidden-action" id="btnApagar">🗑 Apagar registro selecionado</button>
+
+          <div class="info">
+            <span>ⓘ</span>
+            <span>Ao encerrar, a hora fim será registrada automaticamente. O envio real para o Horizon/Supabase ainda está simulado neste HTML.</span>
+          </div>
+        </form>
+      </aside>
+    </section>
+  </main>
+
+  <section class="modal" id="modal">
+    <div class="modal-card">
+      <h2 id="modalTitle">Registro salvo</h2>
+      <p id="modalText">O registro foi estruturado visualmente.</p>
+      <div class="modal-grid" id="modalGrid"></div>
+      <div class="modal-actions">
+        <button type="button" class="big-btn primary" id="btnModalOk">OK</button>
+        <button type="button" class="big-btn outline" id="btnModalFechar">Fechar</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const STORAGE_KEY = "horizon_wave_registros_demo_v2";
+    const ORIGEM = "PTH/WAVE";
+    const LINHA_PADRAO = "PTH/Wave 1";
+
+    let registros = carregarRegistros();
+    let modoEdicaoId = null;
+    let selectedId = null;
+
+    const refs = {
+      tbody: document.getElementById("tbodyRegistros"),
+      data: document.getElementById("data"),
+      inicio: document.getElementById("inicio"),
+      fim: document.getElementById("fim"),
+      linha: document.getElementById("linha"),
+      op: document.getElementById("op"),
+      motivo: document.getElementById("motivo"),
+      obs: document.getElementById("obs"),
+      suporte: document.getElementById("suporte"),
+      charCount: document.getElementById("charCount"),
+      statusForm: document.getElementById("statusForm"),
+      formTitle: document.getElementById("formTitle"),
+      alertBox: document.getElementById("alertBox"),
+      form: document.getElementById("formRegistro"),
+      btnNovo: document.getElementById("btnNovo"),
+      btnFechar: document.getElementById("btnFechar"),
+      btnSalvar: document.getElementById("btnSalvar"),
+      btnEncerrar: document.getElementById("btnEncerrar"),
+      btnApagar: document.getElementById("btnApagar"),
+      finishBox: document.getElementById("finishBox"),
+      tableInfo: document.getElementById("tableInfo"),
+      paginationBox: document.getElementById("paginationBox"),
+      perPageBox: document.getElementById("perPageBox"),
+      notCount: document.getElementById("notCount"),
+      kpiAbertos: document.getElementById("kpiAbertos"),
+      kpiAndamento: document.getElementById("kpiAndamento"),
+      kpiConcluidos: document.getElementById("kpiConcluidos"),
+      modal: document.getElementById("modal"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalText: document.getElementById("modalText"),
+      modalGrid: document.getElementById("modalGrid"),
+      btnModalOk: document.getElementById("btnModalOk"),
+      btnModalFechar: document.getElementById("btnModalFechar")
+    };
+
+    function carregarRegistros() {
+      try {
+        const salvo = localStorage.getItem(STORAGE_KEY);
+        if (salvo) return JSON.parse(salvo);
+      } catch (error) {
+        console.warn("Falha ao ler registros locais:", error);
+      }
+      return [];
+    }
+
+    function salvarLocal() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(registros));
+    }
+
+    function gerarId() {
+      return "reg_" + Date.now() + "_" + Math.floor(Math.random() * 999999);
+    }
+
+    function pad2(valor) {
+      return String(valor).padStart(2, "0");
+    }
+
+    function formatarData(data) {
+      return `${pad2(data.getDate())}/${pad2(data.getMonth() + 1)}/${data.getFullYear()}`;
+    }
+
+    function formatarHora(data) {
+      return `${pad2(data.getHours())}:${pad2(data.getMinutes())}`;
+    }
+
+    function minutosDaHora(hora) {
+      if (!hora || hora === "—") return null;
+      const partes = hora.split(":").map(Number);
+      if (partes.length < 2 || Number.isNaN(partes[0]) || Number.isNaN(partes[1])) return null;
+      return partes[0] * 60 + partes[1];
+    }
+
+    function calcularTempo(inicio, fim) {
+      const minInicio = minutosDaHora(inicio);
+      let minFim = minutosDaHora(fim);
+
+      if (minInicio === null) return "00:00:00";
+      if (minFim === null) minFim = minutosDaHora(formatarHora(new Date()));
+
+      let diff = minFim - minInicio;
+      if (diff < 0) diff += 24 * 60;
+
+      const h = Math.floor(diff / 60);
+      const m = diff % 60;
+      return `${pad2(h)}:${pad2(m)}:00`;
+    }
+
+    function tempoParaSegundos(tempo) {
+      const partes = tempo.split(":").map(Number);
+      return partes[0] * 3600 + partes[1] * 60 + partes[2];
+    }
+
+    function segundosParaTempo(total) {
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+      return `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+    }
+
+    function acumuladoAte(index) {
+      let total = 0;
+      for (let i = 0; i <= index; i++) {
+        total += tempoParaSegundos(calcularTempo(registros[i].inicio, registros[i].fim));
+      }
+      return segundosParaTempo(total);
+    }
+
+    function statusClass(status) {
+      return status === "CONCLUÍDO" ? "done" : "open";
+    }
+
+    function renderTabela() {
+      refs.tbody.innerHTML = "";
+
+      if (registros.length === 0) {
+        refs.tbody.innerHTML = `
+          <tr class="empty-row">
+            <td colspan="11">
+              <strong>Nenhum registro de parada aberto ainda.</strong>
+              Clique em “+ Novo Registro”, preencha o motivo e a observação, depois use “Salvar / Iniciar”.
+            </td>
+          </tr>
+        `;
+      } else {
+        registros.forEach((reg, index) => {
+          const tr = document.createElement("tr");
+          tr.className = "data-row";
+          if (reg.status === "EM ABERTURA") tr.classList.add("open-row");
+          if (reg.id === selectedId) tr.classList.add("selected-row");
+
+          tr.dataset.id = reg.id;
+          tr.innerHTML = `
+            <td><span class="status ${statusClass(reg.status)}">${reg.status}</span></td>
+            <td>${reg.origem}</td>
+            <td>${reg.data}</td>
+            <td>${reg.linha}</td>
+            <td>${reg.op || "—"}</td>
+            <td>${reg.inicio}</td>
+            <td>${reg.fim || "—"}</td>
+            <td class="cyan-text">${calcularTempo(reg.inicio, reg.fim)}</td>
+            <td>${acumuladoAte(index)}</td>
+            <td>${reg.motivo}</td>
+            <td>${reg.obs || "—"}</td>
+          `;
+
+          tr.addEventListener("click", () => carregarNoFormulario(reg.id));
+          tr.addEventListener("dblclick", () => encerrarRegistro(reg.id));
+          refs.tbody.appendChild(tr);
+
+          if (reg.status === "EM ABERTURA") {
+            const hint = document.createElement("tr");
+            hint.className = "hint-row";
+            hint.innerHTML = `
+              <td colspan="11">
+                <div class="hint-content">
+                  <span>ⓘ Parada em abertura. Clique na linha para revisar ou toque em Finalizar quando a parada for resolvida.</span>
+                  <button type="button" class="btn-end-small" data-end="${reg.id}">✓ Finalizar</button>
+                </div>
+              </td>
+            `;
+            refs.tbody.appendChild(hint);
+          }
+        });
+      }
+
+      refs.tbody.querySelectorAll("[data-end]").forEach(btn => {
+        btn.addEventListener("click", event => {
+          event.stopPropagation();
+          encerrarRegistro(btn.dataset.end);
+        });
+      });
+
+      refs.tableInfo.textContent = registros.length === 0
+        ? "Mostrando 0 registros"
+        : `Mostrando 1 a ${Math.min(registros.length, 20)} de ${registros.length} registros`;
+
+      const esconderPaginacao = registros.length <= 20;
+      refs.paginationBox.classList.toggle("hidden", esconderPaginacao);
+      refs.perPageBox.classList.toggle("hidden", esconderPaginacao);
+
+      atualizarKpis();
+    }
+
+    function atualizarKpis() {
+      const hoje = formatarData(new Date());
+      const abertos = registros.filter(r => r.status === "EM ABERTURA").length;
+      const concluidosHoje = registros.filter(r => r.status === "CONCLUÍDO" && r.data === hoje).length;
+
+      refs.kpiAbertos.textContent = abertos;
+      refs.kpiAndamento.textContent = abertos;
+      refs.kpiConcluidos.textContent = concluidosHoje;
+      refs.notCount.textContent = abertos;
+    }
+
+    function novoRegistro() {
+      const aberto = registros.find(r => r.status === "EM ABERTURA");
+      if (aberto) {
+        carregarNoFormulario(aberto.id);
+        mostrarAlerta(["Já existe um chamado em abertura. Encerre o chamado atual antes de criar um novo."]);
+        return;
+      }
+
+      modoEdicaoId = null;
+      selectedId = null;
+      refs.formTitle.textContent = "Novo Registro de Parada";
+      refs.data.value = formatarData(new Date());
+      refs.inicio.value = formatarHora(new Date());
+      refs.fim.value = "—";
+      refs.linha.value = LINHA_PADRAO;
+      refs.op.value = "";
+      refs.motivo.value = "";
+      refs.obs.value = "";
+      refs.suporte.checked = false;
+      refs.statusForm.textContent = "Status: NOVO REGISTRO";
+      refs.btnSalvar.textContent = "▶ Salvar / Iniciar Parada";
+      refs.finishBox.classList.remove("show");
+      refs.btnApagar.classList.add("hidden-action");
+      esconderAlerta();
+      atualizarCharCount();
+      renderTabela();
+      refs.motivo.focus();
+    }
+
+    function carregarNoFormulario(id) {
+      const reg = registros.find(r => r.id === id);
+      if (!reg) return;
+
+      modoEdicaoId = id;
+      selectedId = id;
+      refs.formTitle.textContent = reg.status === "CONCLUÍDO" ? "Registro Concluído" : "Registro em Abertura";
+      refs.data.value = reg.data;
+      refs.inicio.value = reg.inicio;
+      refs.fim.value = reg.fim || "—";
+      refs.linha.value = reg.linha;
+      refs.op.value = reg.op || "";
+      refs.motivo.value = reg.motivo;
+      refs.obs.value = reg.obs || "";
+      refs.suporte.checked = !!reg.suporte;
+      refs.statusForm.textContent = `Status: ${reg.status}`;
+
+      if (reg.status === "EM ABERTURA") {
+        refs.btnSalvar.textContent = "Salvar Alterações";
+        refs.finishBox.classList.add("show");
+        refs.btnApagar.classList.remove("hidden-action");
+      } else {
+        refs.btnSalvar.textContent = "Salvar Alterações";
+        refs.finishBox.classList.remove("show");
+        refs.btnApagar.classList.remove("hidden-action");
+      }
+
+      esconderAlerta();
+      atualizarCharCount();
+      renderTabela();
+    }
+
+    function validar() {
+      const erros = [];
+      if (!refs.motivo.value) erros.push("Selecione o motivo da parada.");
+      if (!refs.obs.value.trim()) erros.push("Preencha a observação.");
+      return erros;
+    }
+
+    function mostrarAlerta(erros) {
+      refs.alertBox.innerHTML = `Corrija antes de salvar:<br>${erros.map(e => "• " + e).join("<br>")}`;
+      refs.alertBox.classList.add("show");
+    }
+
+    function esconderAlerta() {
+      refs.alertBox.classList.remove("show");
+      refs.alertBox.innerHTML = "";
+    }
+
+    function salvarOuIniciar(event) {
+      event.preventDefault();
+
+      const erros = validar();
+      if (erros.length) {
+        mostrarAlerta(erros);
+        return;
+      }
+
+      const registroExistente = modoEdicaoId ? registros.find(r => r.id === modoEdicaoId) : null;
+      const aberto = registros.find(r => r.status === "EM ABERTURA");
+
+      if (!registroExistente && aberto) {
+        carregarNoFormulario(aberto.id);
+        mostrarAlerta(["Já existe um chamado em abertura. Encerre o chamado atual antes de criar outro."]);
+        return;
+      }
+
+      const payload = {
+        status: registroExistente ? registroExistente.status : "EM ABERTURA",
+        origem: ORIGEM,
+        data: refs.data.value || formatarData(new Date()),
+        linha: refs.linha.value || LINHA_PADRAO,
+        op: refs.op.value.trim(),
+        inicio: refs.inicio.value || formatarHora(new Date()),
+        fim: refs.fim.value === "—" ? "" : refs.fim.value,
+        motivo: refs.motivo.value,
+        obs: refs.obs.value.trim(),
+        suporte: refs.suporte.checked
+      };
+
+      if (registroExistente) {
+        registros = registros.map(r => r.id === modoEdicaoId ? { ...r, ...payload } : r);
+        selectedId = modoEdicaoId;
+      } else {
+        const novo = { id: gerarId(), ...payload };
+        registros.unshift(novo);
+        selectedId = novo.id;
+        modoEdicaoId = novo.id;
+      }
+
+      salvarLocal();
+      renderTabela();
+      if (modoEdicaoId) carregarNoFormulario(modoEdicaoId);
+      abrirModal("Parada salva / iniciada", "A parada foi aberta visualmente. Ela ainda não foi enviada para banco real.", payload);
+    }
+
+    function encerrarRegistro(id = modoEdicaoId) {
+      if (!id) {
+        mostrarAlerta(["Clique em uma parada em abertura na tabela antes de finalizar."]);
+        return;
+      }
+
+      const reg = registros.find(r => r.id === id);
+
+      if (!reg) {
+        mostrarAlerta(["Registro não encontrado."]);
+        return;
+      }
+
+      if (reg.status === "CONCLUÍDO") {
+        abrirModal("Parada já finalizada", "Este registro já possui hora fim e status concluído.", reg);
+        return;
+      }
+
+      const confirmar = confirm(
+        `Deseja finalizar esta parada mesmo?\n\n` +
+        `Linha: ${reg.linha}\n` +
+        `Motivo: ${reg.motivo}\n` +
+        `Início: ${reg.inicio}\n\n` +
+        `A hora fim será registrada automaticamente.`
+      );
+
+      if (!confirmar) return;
+
+      reg.fim = formatarHora(new Date());
+      reg.status = "CONCLUÍDO";
+
+      salvarLocal();
+      selectedId = reg.id;
+      modoEdicaoId = reg.id;
+      renderTabela();
+      carregarNoFormulario(reg.id);
+      enviarRegistroAoHorizon(reg);
+      abrirModal("Parada finalizada", "Hora fim registrada automaticamente. Registro pronto para envio ao Horizon PTH/WAVE.", reg);
+    }
+
+    function apagarRegistroSelecionado() {
+      if (!modoEdicaoId) {
+        mostrarAlerta(["Clique em um registro na tabela antes de apagar."]);
+        return;
+      }
+
+      const reg = registros.find(r => r.id === modoEdicaoId);
+      if (!reg) {
+        mostrarAlerta(["Registro não encontrado para apagar."]);
+        return;
+      }
+
+      const confirmar = confirm(`Deseja apagar este registro?\n\nLinha: ${reg.linha}\nMotivo: ${reg.motivo}\nInício: ${reg.inicio}`);
+      if (!confirmar) return;
+
+      registros = registros.filter(r => r.id !== modoEdicaoId);
+      salvarLocal();
+
+      abrirModal("Registro apagado", "O registro foi removido apenas desta tela/protótipo local.", reg);
+      novoRegistro();
+      renderTabela();
+    }
+
+    function enviarRegistroAoHorizon(registro) {
+      console.log("Registro pronto para integração Horizon PTH/WAVE:", registro);
+      // Integração futura:
+      // fetch("/api/pth-wave/paradas", { method: "POST", body: JSON.stringify(registro) })
+      // ou Supabase / fila offline.
+    }
+
+    function abrirModal(titulo, texto, registro) {
+      refs.modalTitle.textContent = titulo;
+      refs.modalText.textContent = texto;
+
+      const itens = [
+        ["Status", registro.status || "EM ABERTURA"],
+        ["Origem", registro.origem || ORIGEM],
+        ["Data", registro.data],
+        ["Linha", registro.linha || LINHA_PADRAO],
+        ["OP", registro.op || "—"],
+        ["Início", registro.inicio],
+        ["Fim", registro.fim || "—"],
+        ["Motivo", registro.motivo],
+        ["Obs", registro.obs || "—"]
+      ];
+
+      refs.modalGrid.innerHTML = itens.map(([label, value]) => `
+        <div class="modal-item">
+          <span>${label}</span>
+          <strong>${value}</strong>
+        </div>
+      `).join("");
+
+      refs.modal.classList.add("show");
+    }
+
+    function fecharModal() {
+      refs.modal.classList.remove("show");
+    }
+
+    function atualizarCharCount() {
+      refs.charCount.textContent = refs.obs.value.length;
+    }
+
+    refs.btnNovo.addEventListener("click", novoRegistro);
+    refs.btnFechar.addEventListener("click", novoRegistro);
+    refs.form.addEventListener("submit", salvarOuIniciar);
+
+    refs.btnEncerrar.addEventListener("click", () => {
+      encerrarRegistro(modoEdicaoId);
+    });
+
+    refs.btnApagar.addEventListener("click", apagarRegistroSelecionado);
+
+    refs.obs.addEventListener("input", () => {
+      atualizarCharCount();
+      esconderAlerta();
+    });
+
+    refs.motivo.addEventListener("change", esconderAlerta);
+
+    refs.btnModalFechar.addEventListener("click", fecharModal);
+
+    refs.btnModalOk.addEventListener("click", fecharModal);
+
+    refs.modal.addEventListener("click", event => {
+      if (event.target === refs.modal) fecharModal();
+    });
+
+    setInterval(() => {
+      renderTabela();
+    }, 30000);
+
+    function inicializarTela() {
+      const aberto = registros.find(r => r.status === "EM ABERTURA");
+      if (aberto) {
+        carregarNoFormulario(aberto.id);
+      } else {
+        modoEdicaoId = null;
+        selectedId = null;
+        refs.formTitle.textContent = "Novo Registro de Parada";
+        refs.data.value = formatarData(new Date());
+        refs.inicio.value = formatarHora(new Date());
+        refs.fim.value = "—";
+        refs.linha.value = LINHA_PADRAO;
+        refs.op.value = "";
+        refs.motivo.value = "";
+        refs.obs.value = "";
+        refs.suporte.checked = false;
+        refs.statusForm.textContent = "Status: NOVO REGISTRO";
+        refs.btnSalvar.textContent = "▶ Salvar / Iniciar Parada";
+        refs.finishBox.classList.remove("show");
+        refs.btnApagar.classList.add("hidden-action");
+        atualizarCharCount();
+        renderTabela();
+      }
+    }
+
+    inicializarTela();
+  </script>
+</body>
+</html>
