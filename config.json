@@ -1,30 +1,22 @@
 {
   "projeto": "Horizon OEE — PTH/WAVE",
-  "modo": "supabase_login_usuarios",
+  "modo": "login_lista_usuarios_acesso_limitado",
   "supabaseUrl": "https://abmlvlkkflxzvcciwawz.supabase.co",
   "supabasePublishableKey": "sb_publishable_QpuOFGCQUZKG2LGV027sHA_dxSw5McV",
-  "schema": "public",
   "tabelaRegistros": "downtime_pth_wave",
   "tabelaUsuarios": "usuarios",
-  "rpcLogin": "autenticar_usuario_pth_wave",
+  "rpcListarUsuarios": "listar_usuarios_pth_wave",
+  "rpcLoginLista": "autenticar_usuario_pth_wave_lista",
   "tabelaOriginalProtegida": "downtime",
   "origemPadrao": "PTH/WAVE",
-  "linhas": [
-    "PTH/Wave 1",
-    "PTH/Wave 2"
-  ],
+  "linhas": ["PTH/Wave 1", "PTH/Wave 2"],
   "linhaPadrao": "PTH/Wave 1",
-  "motivos": [
-    "Manutenção",
-    "Parada por Processo",
-    "Setup",
-    "Falta de Material",
-    "Qualidade"
-  ],
+  "motivos": ["Manutenção", "Parada por Processo", "Setup", "Falta de Material", "Qualidade"],
   "bloquearMultiplosChamadosAbertos": true,
   "permitirApagarRegistro": true,
   "atualizacaoAutomaticaMs": 5000,
   "observacaoMaxCaracteres": 250,
-  "loginObrigatorio": true,
-  "versao": "PTH-WAVE-LOGIN-USUARIOS-1.0"
+  "operadorSemSenha": true,
+  "operadorSomenteAbreChamado": true,
+  "versao": "PTH-WAVE-LOGIN-LISTA-LIMITADO-1.0"
 }
