@@ -27,7 +27,8 @@
   "observacaoMaxCaracteres": 250,
   "operadorSemSenha": true,
   "operadorSomenteAbreChamado": true,
-  "versao": "PTH-WAVE-ADMIN-EDITA-HORA-FIM-1.0",
+  "versao": "PTH-WAVE-BLOQUEIO-POR-LINHA-1.0",
   "regraOperador": "Operador pode finalizar todos os motivos, exceto Parada por Processo.",
-  "regraAdmin": "Admin/técnico pode corrigir hora fim de registro concluído."
+  "regraAdmin": "Admin/técnico pode corrigir hora fim de registro concluído.",
+  "regraChamadoAberto": "Permite um chamado aberto por linha. Wave 1 aberta não bloqueia Wave 2."
 }
