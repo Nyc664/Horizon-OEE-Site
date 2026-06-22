@@ -1,0 +1,27 @@
+{
+  "projeto": "Horizon OEE — PTH/WAVE",
+  "modo": "supabase",
+  "supabaseUrl": "https://abmlvlkkflxzvcciwawz.supabase.co",
+  "supabasePublishableKey": "sb_publishable_QpuOFGCQUZKG2LGV027sHA_dxSw5McV",
+  "schema": "public",
+  "tabelaRegistros": "downtime_pth_wave",
+  "tabelaOriginalProtegida": "downtime",
+  "origemPadrao": "PTH/WAVE",
+  "linhas": [
+    "PTH/Wave 1",
+    "PTH/Wave 2"
+  ],
+  "linhaPadrao": "PTH/Wave 1",
+  "motivos": [
+    "Manutenção",
+    "Parada por Processo",
+    "Setup",
+    "Falta de Material",
+    "Qualidade"
+  ],
+  "bloquearMultiplosChamadosAbertos": true,
+  "permitirApagarRegistro": true,
+  "atualizacaoAutomaticaMs": 5000,
+  "observacaoMaxCaracteres": 250,
+  "versao": "PTH-WAVE-SUPABASE-1.0"
+}
