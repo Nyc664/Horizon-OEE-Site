@@ -27,8 +27,9 @@
   "observacaoMaxCaracteres": 250,
   "operadorSemSenha": true,
   "operadorSomenteAbreChamado": true,
-  "versao": "PTH-WAVE-BLOQUEIO-POR-LINHA-1.0",
+  "versao": "PTH-WAVE-AVISO-WAVE-ABERTA-1.0",
   "regraOperador": "Operador pode finalizar todos os motivos, exceto Parada por Processo.",
   "regraAdmin": "Admin/técnico pode corrigir hora fim de registro concluído.",
-  "regraChamadoAberto": "Permite um chamado aberto por linha. Wave 1 aberta não bloqueia Wave 2."
+  "regraChamadoAberto": "Permite um chamado aberto por linha. Wave 1 aberta não bloqueia Wave 2.",
+  "regraAvisoWaveAberta": "Mostra aviso quando uma Wave já possui chamado aberto e orienta a abrir na Wave livre."
 }
