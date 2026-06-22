@@ -9,14 +9,25 @@
   "rpcLoginLista": "autenticar_usuario_pth_wave_lista",
   "tabelaOriginalProtegida": "downtime",
   "origemPadrao": "PTH/WAVE",
-  "linhas": ["PTH/Wave 1", "PTH/Wave 2"],
+  "linhas": [
+    "PTH/Wave 1",
+    "PTH/Wave 2"
+  ],
   "linhaPadrao": "PTH/Wave 1",
-  "motivos": ["Manutenção", "Parada por Processo", "Setup", "Falta de Material", "Qualidade"],
+  "motivos": [
+    "Manutenção",
+    "Parada por Processo",
+    "Setup",
+    "Falta de Material",
+    "Qualidade"
+  ],
   "bloquearMultiplosChamadosAbertos": true,
   "permitirApagarRegistro": true,
   "atualizacaoAutomaticaMs": 5000,
   "observacaoMaxCaracteres": 250,
   "operadorSemSenha": true,
   "operadorSomenteAbreChamado": true,
-  "versao": "PTH-WAVE-LOGIN-LISTA-LIMITADO-1.0"
+  "versao": "PTH-WAVE-ADMIN-EDITA-HORA-FIM-1.0",
+  "regraOperador": "Operador pode finalizar todos os motivos, exceto Parada por Processo.",
+  "regraAdmin": "Admin/técnico pode corrigir hora fim de registro concluído."
 }
