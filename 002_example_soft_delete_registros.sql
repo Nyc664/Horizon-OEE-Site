@@ -1,0 +1,12 @@
+-- EXEMPLO: adaptar à tabela principal do Horizon, se ela se chamar registros.
+-- Rode apenas se esta tabela existir.
+-- Campos esperados para lixeira segura:
+-- deleted_at TEXT
+-- deleted_by TEXT
+-- delete_reason TEXT
+-- restored_at TEXT
+-- restored_by TEXT
+-- restore_reason TEXT
+-- permanently_deleted_at TEXT
+-- permanently_deleted_by TEXT
+-- permanent_delete_reason TEXT
