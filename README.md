@@ -1,6 +1,6 @@
-# Horizon OEE — PTH/WAVE Static com Segurança Operacional
+# Horizon OEE — PTH/WAVE completo usando public.usuarios
 
-Este pacote mantém o conceito de site pelo GitHub Pages, sem backend Python.
+Este pacote é a versão completa sem backend, mantendo o conceito de GitHub Pages.
 
 ## Estrutura
 
@@ -13,34 +13,30 @@ web/
   js/security.js
   js/app.js
 supabase/
-  001_static_security_schema.sql
+  001_horizon_static_completo_usuarios_existente.sql
 docs/
   COMO_SUBIR.md
   COMO_VALIDAR.md
-  LIMITES_SEM_BACKEND.md
+  COMPATIBILIDADE_EXE.md
 ```
 
-## O que foi adicionado
+## Pontos principais
 
-- Sessão cai após 5 minutos sem atividade.
-- Senha com hash PBKDF2-SHA256 usando WebCrypto.
-- Bloqueio após várias falhas de login.
-- Mensagem genérica de erro de login.
-- Senha novamente para ações críticas.
-- Confirmação antes de ações críticas.
-- Exclusão segura com motivo.
-- Soft delete para lixeira.
-- Lixeira no menu de 3 linhas.
-- Registro de tentativas sem permissão.
-- Registro de quem editou/excluiu/restaurou.
+- Usa a tabela existente `public.usuarios`.
+- Não cria `horizon_users`.
+- Não apaga nem altera `usuarios.senha`.
+- O EXE continua podendo usar a coluna `senha`.
+- O site cria `senha_hash` separado quando o login dá certo.
+- Sessão expira após 5 minutos sem atividade.
+- Bloqueio após várias falhas.
+- Lixeira/soft delete.
+- Exclusão com confirmação, motivo e senha.
+- Auditoria de ações e tentativas negadas.
 - Histórico antes/depois.
 - Backup JSON e restauração somente Admin Master.
 
 ## Passos
 
-1. Suba os arquivos para o GitHub.
-2. No Supabase, rode `supabase/001_static_security_schema.sql`.
-3. Edite `web/js/config.js` com sua URL e anon key do Supabase.
-4. Abra o GitHub Pages.
-5. Clique em "Criar Admin Master inicial".
-6. Faça login e teste.
+1. Suba o pacote no GitHub.
+2. Rode o SQL em `supabase/001_horizon_static_completo_usuarios_existente.sql`.
+3. Abra o GitHub Pages com Ctrl + F5.

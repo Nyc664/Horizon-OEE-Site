@@ -1,6 +1,6 @@
-# Como subir no GitHub
+# Como subir
 
-Na raiz do repositório deixe:
+Na raiz do GitHub deixe:
 
 ```text
 index.html
@@ -10,27 +10,18 @@ supabase/
 docs/
 ```
 
-Apague versões antigas soltas que não estejam nessas pastas.
+Substitua os arquivos antigos por estes.
 
 Depois faça commit:
 
 ```text
-Atualizar Horizon Static com segurança operacional
+Atualizar Horizon PTH/WAVE static completo
 ```
 
-## Configuração
-
-Edite:
+Abra o site e pressione:
 
 ```text
-web/js/config.js
+Ctrl + F5
 ```
 
-Preencha:
-
-```js
-supabaseUrl: "https://xxxx.supabase.co",
-supabaseAnonKey: "sua anon public key"
-```
-
-Nunca coloque `service_role`.
+para limpar cache.

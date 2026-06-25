@@ -1,6 +1,7 @@
 /* Horizon Static Security
-   Sem backend: isto é uma proteção prática para GitHub Pages + Supabase.
-   Para segurança industrial real contra usuário malicioso, usar backend ou RLS forte.
+   Mantém o site em GitHub Pages.
+   Senha antiga do EXE permanece em public.usuarios.senha.
+   Hash do site fica em campos novos, sem apagar senha.
 */
 const HorizonSecurity = (() => {
   const enc = new TextEncoder();

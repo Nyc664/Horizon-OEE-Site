@@ -1,53 +1,43 @@
 # Como validar
 
-## 1. F12 / Sources
+## 1. Login
 
-Pesquise:
+- Deve carregar usuários da tabela `public.usuarios`.
+- Não deve aparecer texto sobre senha/hash na tela.
+- Senha errada deve mostrar: `Usuário ou senha inválidos.`
+
+## 2. Compatibilidade com EXE
+
+No Supabase, a coluna `usuarios.senha` deve continuar preenchida.
+
+O site pode preencher:
 
 ```text
-service_role
-SUPABASE_SERVICE_ROLE
+senha_hash
+senha_salt
+senha_iteracoes
 ```
 
-Não pode aparecer.
+mas não deve apagar `senha`.
 
-## 2. Login errado
+## 3. Exclusão
 
-Erre a senha 5 vezes.
+Ao excluir:
 
-Esperado:
-- Mensagem genérica: "Usuário ou senha inválidos."
-- Usuário bloqueado temporariamente.
-- Evento LOGIN_FAIL na auditoria.
+- pede confirmação;
+- pede motivo;
+- pede senha novamente;
+- não apaga o registro;
+- marca `is_deleted = true`;
+- grava auditoria;
+- grava histórico.
 
-## 3. Inatividade
+## 4. Erro UUID
 
-Faça login e fique 5 minutos sem mexer.
+O erro abaixo não deve mais aparecer:
 
-Esperado:
-- Logout automático.
-- Evento LOGOUT.
+```text
+invalid input syntax for type uuid: "3"
+```
 
-## 4. Exclusão segura
-
-Como Admin/Admin Master, tente excluir.
-
-Esperado:
-- Confirmação.
-- Motivo obrigatório.
-- Senha novamente.
-- Registro vai para lixeira, não é apagado.
-- Evento REGISTRO_SOFT_DELETE.
-- Histórico antes/depois.
-
-## 5. Tentativa sem permissão
-
-Como Operador, tente abrir lixeira ou excluir.
-
-Esperado:
-- Acesso negado.
-- Evento PERMISSION_DENIED.
-
-## 6. Restauração de backup
-
-Só Admin Master deve conseguir restaurar backup JSON.
+porque `horizon_record_history.record_id` agora é `text`.

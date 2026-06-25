@@ -1,6 +1,6 @@
 /* CONFIGURAÇÃO PÚBLICA DO HORIZON
-   Usa a tabela existente public.usuarios.
-   NUNCA coloque service_role ou secret key aqui.
+   Usa GitHub Pages + Supabase.
+   Use somente Publishable/anon key. NUNCA use secret key ou service_role aqui.
 */
 window.HORIZON_CONFIG = {
   supabaseUrl: "https://abmlvlkkflxzvcciwawz.supabase.co",
@@ -19,6 +19,7 @@ window.HORIZON_CONFIG = {
     setor: "setor",
     role: "role",
     ativo: "ativo",
+
     senhaHash: "senha_hash",
     senhaSalt: "senha_salt",
     senhaAlgoritmo: "senha_algoritmo",
@@ -31,7 +32,16 @@ window.HORIZON_CONFIG = {
   origemPadrao: "PTH/WAVE",
   linhas: ["PTH/Wave 1", "PTH/Wave 2"],
   linhaPadrao: "PTH/Wave 1",
-  motivos: ["Setup", "Falta de material", "Qualidade", "Parada por Processo", "Manutenção", "Aguardando suporte", "Outro"],
+  motivos: [
+    "Setup",
+    "Falta de material",
+    "Qualidade",
+    "Parada por Processo",
+    "Manutenção",
+    "Aguardando suporte",
+    "Outro"
+  ],
+
   sessaoInatividadeMs: 5 * 60 * 1000,
   maxFalhasLogin: 5,
   bloqueioMinutos: 15

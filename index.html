@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Horizon OEE — PTH/WAVE Seguro Static</title>
-  <link rel="stylesheet" href="web/css/horizon.css" />
+  <title>Horizon OEE — PTH/WAVE</title>
+  <link rel="stylesheet" href="web/css/horizon.css?v=010" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -52,13 +52,26 @@
           <table>
             <thead>
               <tr>
-                <th>Status</th><th>Origem</th><th>Data</th><th>Linha</th><th>OP</th><th>Início</th><th>Fim</th><th>Tempo</th><th>Motivo</th><th>Aberto por</th><th>OBS</th>
+                <th>Status</th>
+                <th>Origem</th>
+                <th>Data</th>
+                <th>Linha</th>
+                <th>OP</th>
+                <th>Início</th>
+                <th>Fim</th>
+                <th>Tempo</th>
+                <th>Motivo</th>
+                <th>Aberto por</th>
+                <th>OBS</th>
               </tr>
             </thead>
             <tbody id="tbodyRegistros"></tbody>
           </table>
         </div>
-        <footer class="footer"><div id="tableInfo">Mostrando 0 registros</div><div>GitHub Pages Static</div></footer>
+        <footer class="footer">
+          <div id="tableInfo">Mostrando 0 registros</div>
+          <div>GitHub Pages Static</div>
+        </footer>
       </section>
     </section>
   </main>
@@ -74,7 +87,7 @@
     <button class="menuItem" id="menuHistorico" type="button">🕘 Histórico antes/depois</button>
     <button class="menuItem" id="menuBackup" type="button">💾 Backup / Restauração</button>
     <div class="sideNote">
-      <strong>Segurança Static:</strong> as ações críticas usam senha, motivo, auditoria e soft delete. Para segurança industrial total, usar backend ou RLS forte.
+      <strong>Modo GitHub Pages:</strong> usa a tabela existente <code>public.usuarios</code>. A coluna <code>senha</code> é mantida para compatibilidade com o EXE.
     </div>
   </aside>
   <div class="shade" id="shade"></div>
@@ -82,7 +95,7 @@
   <section class="loginback" id="loginBackdrop">
     <form class="login" id="loginForm">
       <h2>Login PTH/WAVE</h2>
-      <p>Usuários com senha hash PBKDF2. Sessão cai após 5 minutos sem atividade.</p>
+      <p>Usuários cadastrados no Horizon. Sessão cai após 5 minutos sem atividade.</p>
       <div class="alert" id="loginAlert"></div>
 
       <div class="field">
@@ -98,7 +111,7 @@
       </div>
 
       <button class="big primary" type="submit">SALVAR LOGIN</button>
-      <button class="big outline" id="btnSetupAdmin" type="button">Criar Admin Master inicial</button>
+      <button class="big outline hide" id="btnSetupAdmin" type="button">Criar Admin Master inicial</button>
     </form>
   </section>
 
@@ -124,7 +137,11 @@
 
         <div class="field"><label>OP</label><input class="input" id="op" placeholder="Opcional"></div>
         <div class="field"><label>Motivo</label><select id="motivo" class="input"></select></div>
-        <div class="field"><label>Observação</label><textarea id="obs" placeholder="Descreva a parada"></textarea><div class="chars" id="chars">0 caracteres</div></div>
+        <div class="field">
+          <label>Observação</label>
+          <textarea id="obs" placeholder="Descreva a parada"></textarea>
+          <div class="chars" id="chars">0 caracteres</div>
+        </div>
 
         <label class="check"><input type="checkbox" id="suporte"> Necessitou suporte</label>
 
@@ -150,8 +167,8 @@
     </div>
   </section>
 
-  <script src="web/js/config.js"></script>
-  <script src="web/js/security.js"></script>
-  <script src="web/js/app.js"></script>
+  <script src="web/js/config.js?v=010"></script>
+  <script src="web/js/security.js?v=010"></script>
+  <script src="web/js/app.js?v=010"></script>
 </body>
 </html>
