@@ -63,8 +63,11 @@ async function carregarUsuarios(){
   refs.loginUsuario.innerHTML=usuarios.length?usuarios.map(u=>`<option value="${esc(uid(u))}">${esc(unome(u))}</option>`).join(''):'<option value="">Nenhum usuário em public.usuarios</option>';
   resumoLogin();
 }
-function resumoLogin(){const u=usuarios.find(x=>String(uid(x))===String(refs.loginUsuario.value)); if(!u){refs.loginResumo.innerHTML='Nenhum usuário encontrado em public.usuarios.';return} refs.loginResumo.innerHTML=`<strong>Perfil:</strong> ${esc(roleOf(u))}<br><strong>E-mail:</strong> ${esc(uemail(u)||'—')}<br><strong>Senha:</strong> ${u[f().senhaHash]?'hash PBKDF2':'senha antiga será migrada para hash no próximo login'}`}
-
+refs.loginResumo.innerHTML = `
+  <strong>Perfil:</strong> ${esc(role)}<br>
+  <strong>E-mail:</strong> ${esc(userEmail(u) || "—")}<br>
+  <strong>Segurança:</strong> acesso protegido
+`;
 async function login(e){
   e.preventDefault(); clearLoginAlert(); const c=f(); const u=usuarios.find(x=>String(uid(x))===String(refs.loginUsuario.value)); const senha=refs.loginSenha.value;
   if(!u||!senha){alertLogin('Usuário ou senha inválidos.');return}
