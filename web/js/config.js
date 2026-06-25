@@ -1,6 +1,6 @@
 /* CONFIGURAÇÃO PÚBLICA DO HORIZON
-   A anon key do Supabase é pública por natureza. NUNCA coloque service_role aqui.
-   Copie sua URL e sua anon/public key do Supabase.
+   Usa a tabela existente public.usuarios.
+   NUNCA coloque service_role ou secret key aqui.
 */
 window.HORIZON_CONFIG = {
   supabaseUrl: "https://abmlvlkkflxzvcciwawz.supabase.co",
@@ -11,19 +11,27 @@ window.HORIZON_CONFIG = {
   tabelaAuditoria: "horizon_security_events",
   tabelaHistorico: "horizon_record_history",
 
+  usuarioCampos: {
+    id: "id",
+    nome: "nome",
+    email: "email",
+    senhaAntiga: "senha",
+    setor: "setor",
+    role: "role",
+    ativo: "ativo",
+    senhaHash: "senha_hash",
+    senhaSalt: "senha_salt",
+    senhaAlgoritmo: "senha_algoritmo",
+    senhaIteracoes: "senha_iteracoes",
+    failedLoginCount: "failed_login_count",
+    lockedUntil: "locked_until",
+    lastLoginAt: "last_login_at"
+  },
+
   origemPadrao: "PTH/WAVE",
   linhas: ["PTH/Wave 1", "PTH/Wave 2"],
   linhaPadrao: "PTH/Wave 1",
-  motivos: [
-    "Setup",
-    "Falta de material",
-    "Qualidade",
-    "Parada por Processo",
-    "Manutenção",
-    "Aguardando suporte",
-    "Outro"
-  ],
-
+  motivos: ["Setup", "Falta de material", "Qualidade", "Parada por Processo", "Manutenção", "Aguardando suporte", "Outro"],
   sessaoInatividadeMs: 5 * 60 * 1000,
   maxFalhasLogin: 5,
   bloqueioMinutos: 15
