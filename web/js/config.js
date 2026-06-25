@@ -7,7 +7,7 @@ window.HORIZON_CONFIG = {
   supabaseAnonKey: "sb_publishable_QpuOFGCQUZKG2LGV027sHA_dxSw5McV",
 
   tabelaRegistros: "downtime_pth_wave",
-  tabelaUsuarios: "horizon_users",
+  tabelaUsuarios: "usuarios",
   tabelaAuditoria: "horizon_security_events",
   tabelaHistorico: "horizon_record_history",
 
