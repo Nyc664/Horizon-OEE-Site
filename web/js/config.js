@@ -3,8 +3,8 @@
    Copie sua URL e sua anon/public key do Supabase.
 */
 window.HORIZON_CONFIG = {
-  supabaseUrl: "COLE_AQUI_SUA_SUPABASE_URL",
-  supabaseAnonKey: "COLE_AQUI_SUA_SUPABASE_ANON_KEY",
+  supabaseUrl: "https://abmlvlkkflxzvcciwawz.supabase.co/rest/v1/",
+  supabaseAnonKey: "sb_publishable_QpuOFGCQUZKG2LGV027sHA_dxSw5McV",
 
   tabelaRegistros: "downtime_pth_wave",
   tabelaUsuarios: "horizon_users",
